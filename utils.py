@@ -1,9 +1,11 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision.transforms as transforms
 
 import matplotlib.pyplot as plt
 import numpy as np
+from PIL import Image
 
 class ContrastiveLoss(nn.Module):
 	def __init__(self, margin=2.0):
@@ -30,3 +32,13 @@ def show_plot(iteration, loss):
     plt.plot(iteration, loss)
     plt.show()
 
+
+def convert_img(img, size=[1, 1, 100, 100]):
+    transformation = transforms.Compose([transforms.Resize((100, 100)),
+                                    transforms.ToTensor()])
+    im = Image.open(img)
+    im = im.convert('L')
+    im = transformation(im)
+    im = im.reshape(size)
+
+    return im
